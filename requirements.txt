@@ -1,0 +1,4 @@
+# Node.js and npm dependencies are managed in package.json
+# For container platforms that detect Python runtimes or require requirements.txt:
+# Note: Prayag Techno Solutions is built with full-stack Node.js (Express + Vite + React 19).
+# Node.js version >= 20.x or 22.x is recommended.

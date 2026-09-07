@@ -1,0 +1,8 @@
+{
+  "name": "Prayag Techno Solutions",
+  "description": "Official website for PRAYAG TECHNO SOLUTIONS PRIVATE LIMITED offering IT Services, HR Services, BPO Solutions, GeM Consultancy, and online booking.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
