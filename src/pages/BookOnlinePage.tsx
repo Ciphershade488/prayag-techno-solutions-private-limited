@@ -287,7 +287,7 @@ export const BookOnlinePage: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="mt-6 flex items-start gap-3 rounded-lg border border-border/80 bg-slate-50/60 p-4 dark:bg-slate-900/40">
+                <div className="mt-6 flex items-start gap-3 rounded-lg border border-slate-200 bg-slate-50 p-4">
                   <Checkbox
                     id="bk-gdpr"
                     checked={form.gdpr}

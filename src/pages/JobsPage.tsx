@@ -194,7 +194,7 @@ export const JobsPage: React.FC = () => {
       </section>
 
       {/* Why Join Us Culture Grid */}
-      <section className="border-b border-border bg-slate-50/70 py-12 dark:bg-slate-900/40">
+      <section className="border-b border-slate-200 bg-slate-50 py-12">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {CULTURE_PILLARS.map((p, i) => (
@@ -351,7 +351,7 @@ export const JobsPage: React.FC = () => {
 
                     {/* Expanded Job Specifications */}
                     {isExpanded && (
-                      <div className="border-t border-border bg-slate-50/60 p-6 dark:bg-slate-900/30 sm:p-7">
+                      <div className="border-t border-slate-200 bg-slate-50 p-6 sm:p-7">
                         <div className="grid gap-6 md:grid-cols-2">
                           {job.responsibilities && (
                             <div>
@@ -545,7 +545,7 @@ export const JobsPage: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="mt-6 flex items-start gap-3 rounded-lg border border-border/80 bg-slate-50/60 p-4 dark:bg-slate-900/40">
+                <div className="mt-6 flex items-start gap-3 rounded-lg border border-slate-200 bg-slate-50 p-4">
                   <Checkbox
                     id="jb-gdpr"
                     checked={form.gdpr}

@@ -176,46 +176,47 @@ export const AboutPage: React.FC = () => {
 
             <div className="lg:col-span-5">
               <Reveal delay={0.1}>
-                <div className="rounded-2xl border border-border bg-slate-50/80 p-6 shadow-sm dark:bg-slate-900/60 sm:p-8">
-                  <div className="flex items-center justify-between border-b border-border pb-4">
-                    <h3 className="font-display text-lg font-bold text-foreground">
+                <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xl ring-1 ring-slate-100 sm:p-8">
+                  <div className="flex items-center justify-between border-b border-slate-200 pb-4">
+                    <h3 className="font-display text-lg font-bold text-slate-900">
                       Company Profile &amp; Facts
                     </h3>
-                    <span className="rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-bold text-primary">
+                    <span className="inline-flex items-center gap-1 rounded-full border border-blue-200 bg-blue-50 px-2.5 py-0.5 text-xs font-bold text-blue-700">
+                      <CheckCircle2 className="h-3 w-3 text-blue-600" />
                       Verified
                     </span>
                   </div>
 
-                  <dl className="mt-5 space-y-3.5 text-xs">
-                    <div className="flex justify-between border-b border-border/60 pb-2">
-                      <dt className="font-medium text-muted-foreground">Legal Entity</dt>
-                      <dd className="font-semibold text-foreground text-right">
+                  <dl className="mt-5 space-y-3.5 text-xs sm:text-sm">
+                    <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                      <dt className="font-semibold text-slate-600">Legal Entity</dt>
+                      <dd className="max-w-[62%] font-bold text-slate-900 text-right">
                         {company.legal_name || 'PRAYAG TECHNO SOLUTIONS PRIVATE LIMITED'}
                       </dd>
                     </div>
-                    <div className="flex justify-between border-b border-border/60 pb-2">
-                      <dt className="font-medium text-muted-foreground">Founded In</dt>
-                      <dd className="font-semibold text-foreground">2017</dd>
+                    <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                      <dt className="font-semibold text-slate-600">Founded In</dt>
+                      <dd className="font-bold text-slate-900">2017</dd>
                     </div>
-                    <div className="flex justify-between border-b border-border/60 pb-2">
-                      <dt className="font-medium text-muted-foreground">Head Office</dt>
-                      <dd className="font-semibold text-foreground">Prayagraj (Allahabad), U.P.</dd>
+                    <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                      <dt className="font-semibold text-slate-600">Head Office</dt>
+                      <dd className="font-bold text-slate-900 text-right">Prayagraj (Allahabad), U.P.</dd>
                     </div>
-                    <div className="flex justify-between border-b border-border/60 pb-2">
-                      <dt className="font-medium text-muted-foreground">Branch Office</dt>
-                      <dd className="font-semibold text-foreground">Mumfordganj, Prayagraj</dd>
+                    <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                      <dt className="font-semibold text-slate-600">Branch Office</dt>
+                      <dd className="font-bold text-slate-900 text-right">Mumfordganj, Prayagraj</dd>
                     </div>
-                    <div className="flex justify-between border-b border-border/60 pb-2">
-                      <dt className="font-medium text-muted-foreground">South India Center</dt>
-                      <dd className="font-semibold text-foreground">Fort Kochi, Ernakulam, Kerala</dd>
+                    <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                      <dt className="font-semibold text-slate-600">South India Center</dt>
+                      <dd className="font-bold text-slate-900 text-right">Fort Kochi, Ernakulam, Kerala</dd>
                     </div>
-                    <div className="flex justify-between border-b border-border/60 pb-2">
-                      <dt className="font-medium text-muted-foreground">Service Delivery</dt>
-                      <dd className="font-semibold text-foreground">Pan-India Support</dd>
+                    <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                      <dt className="font-semibold text-slate-600">Service Delivery</dt>
+                      <dd className="font-bold text-slate-900">Pan-India Support</dd>
                     </div>
-                    <div className="flex justify-between pt-1">
-                      <dt className="font-medium text-muted-foreground">Business Hours</dt>
-                      <dd className="font-semibold text-foreground">
+                    <div className="flex items-center justify-between pt-1">
+                      <dt className="font-semibold text-slate-600">Business Hours</dt>
+                      <dd className="font-bold text-slate-900 text-right">
                         {company.hours || 'Monday – Saturday, 09:30 – 18:30 IST'}
                       </dd>
                     </div>
@@ -228,7 +229,7 @@ export const AboutPage: React.FC = () => {
       </section>
 
       {/* Operational Infrastructure / Capabilities */}
-      <section className="border-b border-border bg-slate-50/60 py-16 sm:py-24 dark:bg-slate-900/30">
+      <section className="border-b border-slate-200 bg-slate-50 py-16 sm:py-24">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
           <Reveal className="max-w-2xl">
             <span className="text-xs font-bold uppercase tracking-[0.2em] text-primary">
@@ -245,7 +246,7 @@ export const AboutPage: React.FC = () => {
           <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {capabilities.map((c, i) => (
               <Reveal key={c.title} delay={i * 0.07}>
-                <div className="h-full rounded-xl border border-border bg-card p-6 shadow-sm transition-all hover:border-primary/40 hover:shadow-md">
+                <div className="h-full rounded-xl border border-slate-200 bg-white p-6 shadow-sm transition-all hover:border-primary/40 hover:shadow-md">
                   <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary">
                     <c.icon className="h-6 w-6" strokeWidth={1.8} />
                   </span>
@@ -259,7 +260,7 @@ export const AboutPage: React.FC = () => {
       </section>
 
       {/* Core Principles */}
-      <section className="bg-card py-16 sm:py-24">
+      <section className="bg-white py-16 sm:py-24">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
           <div className="text-center">
             <Reveal>
@@ -278,7 +279,7 @@ export const AboutPage: React.FC = () => {
           <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {values.map((v, i) => (
               <Reveal key={v.title} delay={i * 0.08}>
-                <div className="h-full rounded-xl border border-border bg-card p-6 shadow-sm transition-all hover:border-primary/40 hover:shadow-md">
+                <div className="h-full rounded-xl border border-slate-200 bg-white p-6 shadow-sm transition-all hover:border-primary/40 hover:shadow-md">
                   <span className="flex h-11 w-11 items-center justify-center rounded-lg bg-primary/10 text-primary">
                     <v.icon className="h-5 w-5" strokeWidth={1.8} />
                   </span>
@@ -296,7 +297,7 @@ export const AboutPage: React.FC = () => {
       </section>
 
       {/* Chronological Milestones Timeline */}
-      <section className="border-t border-border bg-slate-50/70 py-16 sm:py-24 dark:bg-slate-900/40">
+      <section className="border-t border-slate-200 bg-slate-50 py-16 sm:py-24">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
           <div className="text-center">
             <Reveal>
@@ -312,19 +313,19 @@ export const AboutPage: React.FC = () => {
           <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {milestones.map((m, i) => (
               <Reveal key={m.year} delay={i * 0.08}>
-                <div className="relative h-full rounded-xl border border-border bg-card p-6 shadow-sm transition-all hover:border-primary/40">
+                <div className="relative h-full rounded-xl border border-slate-200 bg-white p-6 shadow-sm transition-all hover:border-primary/40 hover:shadow-md">
                   <div className="flex items-center justify-between">
                     <span className="font-display text-3xl font-extrabold text-primary">
                       {m.year}
                     </span>
-                    <span className="rounded-full bg-blue-50 px-2.5 py-0.5 text-[11px] font-semibold text-primary dark:bg-blue-950/50">
+                    <span className="rounded-full border border-blue-200 bg-blue-50 px-2.5 py-0.5 text-[11px] font-bold text-primary">
                       {m.badge}
                     </span>
                   </div>
-                  <h3 className="mt-3 font-display text-sm font-bold text-foreground">
+                  <h3 className="mt-3 font-display text-sm font-bold text-slate-900">
                     {m.title}
                   </h3>
-                  <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+                  <p className="mt-2 text-xs leading-relaxed text-slate-600">
                     {m.desc}
                   </p>
                 </div>
@@ -335,16 +336,16 @@ export const AboutPage: React.FC = () => {
       </section>
 
       {/* Multi-Location Presence */}
-      <section className="border-t border-border bg-card py-16 sm:py-24">
+      <section className="border-t border-slate-200 bg-white py-16 sm:py-24">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
           <Reveal className="max-w-2xl">
             <span className="text-xs font-bold uppercase tracking-[0.2em] text-primary">
               Nationwide Presence
             </span>
-            <h2 className="mt-2 font-display text-2xl font-bold tracking-tight text-foreground sm:text-4xl">
+            <h2 className="mt-2 font-display text-2xl font-bold tracking-tight text-slate-900 sm:text-4xl">
               Corporate offices and regional centers
             </h2>
-            <p className="mt-2 text-sm text-muted-foreground">
+            <p className="mt-2 text-sm text-slate-600">
               Direct physical accessibility for technical support, client reviews, hardware handovers, and candidate interviews.
             </p>
           </Reveal>
@@ -353,24 +354,24 @@ export const AboutPage: React.FC = () => {
             {company.addresses && company.addresses.length > 0 ? (
               company.addresses.map((addr, idx) => (
                 <Reveal key={idx} delay={idx * 0.08}>
-                  <div className="flex h-full flex-col justify-between rounded-xl border border-border bg-card p-6 shadow-sm transition-all hover:border-primary/40 hover:shadow-md">
+                  <div className="flex h-full flex-col justify-between rounded-xl border border-slate-200 bg-white p-6 shadow-sm transition-all hover:border-primary/40 hover:shadow-md">
                     <div>
                       <div className="flex items-center gap-3">
                         <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
                           <MapPin className="h-5 w-5" strokeWidth={1.8} />
                         </span>
                         <div>
-                          <h3 className="font-display text-sm font-bold text-foreground">
+                          <h3 className="font-display text-sm font-bold text-slate-900">
                             {addr.label}
                           </h3>
                           <span className="text-[11px] font-medium text-primary">Registered Node</span>
                         </div>
                       </div>
-                      <p className="mt-4 text-xs leading-relaxed text-muted-foreground">
+                      <p className="mt-4 text-xs leading-relaxed text-slate-600">
                         {addr.line}
                       </p>
                     </div>
-                    <div className="mt-6 border-t border-border pt-4">
+                    <div className="mt-6 border-t border-slate-100 pt-4">
                       <a
                         href={`tel:${company.phone.replace(/[^+\d]/g, '')}`}
                         className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary hover:underline"
@@ -382,12 +383,12 @@ export const AboutPage: React.FC = () => {
                 </Reveal>
               ))
             ) : (
-              <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
+              <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
                 <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
                   <MapPin className="h-5 w-5" />
                 </span>
-                <h3 className="mt-3 font-display text-sm font-bold text-foreground">Headquarters</h3>
-                <p className="mt-2 text-xs leading-relaxed text-muted-foreground">{company.address}</p>
+                <h3 className="mt-3 font-display text-sm font-bold text-slate-900">Headquarters</h3>
+                <p className="mt-2 text-xs leading-relaxed text-slate-600">{company.address}</p>
               </div>
             )}
           </div>

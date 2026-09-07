@@ -206,7 +206,7 @@ const HomePage: React.FC = () => (
     </section>
 
     {/* Metrics / Stats Band */}
-    <section className="border-b border-border bg-slate-50/80 dark:bg-slate-900/50">
+    <section className="border-b border-slate-200 bg-slate-50">
       <div className="mx-auto grid max-w-6xl grid-cols-2 gap-8 px-4 py-12 sm:px-6 lg:grid-cols-4">
         {STATS.map((s, i) => (
           <Reveal key={s.label} delay={i * 0.08} className="flex items-center gap-4">
@@ -283,7 +283,7 @@ const HomePage: React.FC = () => (
     </section>
 
     {/* Proven Process / How We Work */}
-    <section className="border-y border-border bg-slate-50/70 py-20 dark:bg-slate-900/40 sm:py-24">
+    <section className="border-y border-slate-200 bg-slate-50 py-20 sm:py-24">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <Reveal className="max-w-2xl">
           <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.2em] text-primary">
@@ -377,7 +377,7 @@ const HomePage: React.FC = () => (
     </section>
 
     {/* Sectors We Empower */}
-    <section className="border-y border-border bg-slate-50/60 py-20 dark:bg-slate-900/30 sm:py-24">
+    <section className="border-y border-slate-200 bg-slate-50 py-20 sm:py-24">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <Reveal className="max-w-2xl">
           <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.2em] text-primary">
@@ -457,7 +457,7 @@ const HomePage: React.FC = () => (
     </section>
 
     {/* Contact & Multi-Branch Offices */}
-    <section className="border-t border-border bg-slate-50/70 py-20 dark:bg-slate-900/40 sm:py-24">
+    <section className="border-t border-slate-200 bg-slate-50 py-20 sm:py-24">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <Reveal className="max-w-2xl">
           <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.2em] text-primary">
