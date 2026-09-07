@@ -324,10 +324,13 @@ const HomePage: React.FC = () => (
               className="aspect-[4/3] w-full rounded-2xl object-cover shadow-xl ring-1 ring-border"
               loading="lazy"
             />
-            <div className="absolute -bottom-6 -right-6 hidden rounded-xl border border-border bg-card p-5 shadow-xl sm:block">
-              <p className="text-xs font-semibold text-muted-foreground">Corporate Credibility</p>
-              <p className="mt-1 font-display text-xl font-bold text-foreground">99.8% SLA Delivery</p>
-              <p className="mt-0.5 text-xs text-muted-foreground">Across all hardware &amp; IT contracts</p>
+            <div className="absolute -bottom-6 -right-6 z-10 hidden rounded-xl border border-slate-200 bg-white p-5 shadow-2xl dark:border-slate-800 dark:bg-slate-900 sm:block">
+              <div className="flex items-center gap-1.5 text-xs font-semibold text-primary">
+                <ShieldCheck className="h-3.5 w-3.5 text-primary" />
+                <span>Corporate Credibility</span>
+              </div>
+              <p className="mt-1 font-display text-xl font-bold text-slate-900 dark:text-white">99.8% SLA Delivery</p>
+              <p className="mt-0.5 text-xs text-slate-600 dark:text-slate-400">Across all hardware &amp; IT contracts</p>
             </div>
           </div>
         </Reveal>
