@@ -42,7 +42,7 @@ export const SiteFooter: React.FC = () => {
             <li><Link to="/" className="transition-colors hover:text-white">Home</Link></li>
             <li><Link to="/book-online" className="transition-colors hover:text-white">Book Online</Link></li>
             <li><Link to="/jobs" className="transition-colors hover:text-white">Careers / Jobs</Link></li>
-            <li><Link to="/blank-page" className="transition-colors hover:text-white">About Us</Link></li>
+            <li><Link to="/about" className="transition-colors hover:text-white">About Us</Link></li>
           </ul>
         </div>
 

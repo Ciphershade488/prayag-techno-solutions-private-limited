@@ -12,7 +12,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import HomePage from './pages/HomePage';
 import BookOnlinePage from './pages/BookOnlinePage';
 import JobsPage from './pages/JobsPage';
-import BlankPage from './pages/BlankPage';
+import AboutPage from './pages/AboutPage';
 
 // Admin pages
 import AdminLayout from './pages/admin/AdminLayout';
@@ -46,8 +46,8 @@ function App() {
               <Route path="/" element={<HomePage />} />
               <Route path="/book-online" element={<BookOnlinePage />} />
               <Route path="/jobs" element={<JobsPage />} />
-              <Route path="/blank-page" element={<BlankPage />} />
-              <Route path="/about" element={<BlankPage />} />
+              <Route path="/about" element={<AboutPage />} />
+              <Route path="/blank-page" element={<Navigate to="/about" replace />} />
             </Route>
 
             {/* Admin Login Routes */}

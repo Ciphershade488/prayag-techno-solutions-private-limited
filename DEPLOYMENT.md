@@ -84,11 +84,33 @@ Under the **Environment** tab, add:
 
 ---
 
-## 5. Local Development Commands
+## 5. Neon Database Initialization
+
+The application automatically creates all tables, indexes, and initial seed data on startup. When deploying on Render, simply providing the `DATABASE_URL` environment variable will auto-initialize a fresh Neon database on first launch.
+
+If you prefer to initialize or test a fresh Neon database manually before deploying:
+
+```bash
+# Set your Neon connection string and run the initialization script:
+DATABASE_URL="postgresql://user:password@ep-cool-sample.us-east-2.aws.neon.tech/neondb?sslmode=require" npm run init-db
+```
+
+This will automatically create and verify:
+1. `admins` (with default admin account)
+2. `jobs` (with active job postings)
+3. `company_details` (with corporate contact info)
+4. `bookings` (client consultation requests)
+5. `job_applications` (candidate submissions)
+6. All necessary database indexes (`idx_jobs_status`, `idx_bookings_status`, etc.)
+
+---
+
+## 6. Local Development Commands
 
 - `npm install` — Install all dependencies
 - `npm run dev` — Run development server with live reload
 - `npm run build` — Build production frontend and compile backend bundle to `dist/server.cjs`
 - `npm start` — Run production server
+- `npm run init-db` — Explicitly verify and initialize PostgreSQL database schema
 - `node scripts/create-admin.js <email> <password> [username]` — Create or reset administrator password via CLI
 - `npm run migrate-data` — Transfer existing SQLite data to your PostgreSQL `DATABASE_URL`

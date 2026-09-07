@@ -9,7 +9,7 @@ const NAV = [
   { to: '/', label: 'Home' },
   { to: '/book-online', label: 'Book Online' },
   { to: '/jobs', label: 'Careers' },
-  { to: '/blank-page', label: 'About Us' },
+  { to: '/about', label: 'About Us' },
 ];
 
 export const SiteHeader: React.FC = () => {

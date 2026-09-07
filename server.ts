@@ -12,7 +12,9 @@ import applicationsRoutes from './server/routes/applications';
 
 async function startServer() {
   const app = express();
-  const PORT = 3000;
+  // Support Render / production dynamic PORT, falling back to 3000
+  const envPort = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
+  const PORT = (envPort && envPort !== 8080) ? envPort : 3000;
 
   // Initialize PostgreSQL database, create tables, and seed defaults
   await initDatabase();
