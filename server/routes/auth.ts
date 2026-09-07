@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
-import { db } from '../db';
+import { query } from '../db';
 import { generateToken, requireAdminAuth, AuthRequest } from '../auth';
 
 const router = Router();
@@ -16,12 +16,15 @@ router.post('/login', async (req: Request, res: Response) => {
       return;
     }
 
-    // Look up by username or email
-    const admin = db.prepare(`
-      SELECT id, username, email, password_hash, created_at
-      FROM admins
-      WHERE LOWER(username) = ? OR LOWER(email) = ?
-    `).get(identifier, identifier) as any;
+    // Look up by username or email in PostgreSQL
+    const adminRes = await query(
+      `SELECT id, username, email, password_hash, created_at
+       FROM admins
+       WHERE LOWER(username) = $1 OR LOWER(email) = $2`,
+      [identifier, identifier]
+    );
+
+    const admin = adminRes.rows[0];
 
     if (!admin) {
       res.status(401).json({ error: 'Invalid username/email or password.' });

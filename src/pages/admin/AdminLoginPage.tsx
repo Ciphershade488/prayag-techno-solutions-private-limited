@@ -13,7 +13,7 @@ export const AdminLoginPage: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [identifier, setIdentifier] = useState('admin@prayagtechno.com');
+  const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
   const [status, setStatus] = useState<'idle' | 'submitting' | 'error'>('idle');
   const [error, setError] = useState('');
@@ -110,7 +110,7 @@ export const AdminLoginPage: React.FC = () => {
                   autoComplete="username"
                   value={identifier}
                   onChange={(e) => setIdentifier(e.target.value)}
-                  placeholder="admin@prayagtechno.com or admin"
+                  placeholder="Enter your email or username"
                   className="border-white/15 bg-white/5 text-white placeholder:text-slate-500 focus-visible:border-primary focus-visible:ring-primary/20"
                 />
               </div>

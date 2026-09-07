@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { db } from '../db';
+import { query } from '../db';
 import { requireAdminAuth } from '../auth';
 
 const router = Router();
@@ -39,9 +39,10 @@ function formatCompany(row: any) {
 }
 
 // PUBLIC: GET /api/company
-router.get('/company', (_req: Request, res: Response) => {
+router.get('/company', async (_req: Request, res: Response) => {
   try {
-    const row = db.prepare('SELECT * FROM company_details LIMIT 1').get();
+    const result = await query('SELECT * FROM company_details LIMIT 1');
+    const row = result.rows[0];
     if (!row) {
       res.status(404).json({ error: 'Company details not configured yet.' });
       return;
@@ -54,9 +55,10 @@ router.get('/company', (_req: Request, res: Response) => {
 });
 
 // ADMIN: GET /api/admin/company
-router.get('/admin/company', requireAdminAuth, (_req: Request, res: Response) => {
+router.get('/admin/company', requireAdminAuth, async (_req: Request, res: Response) => {
   try {
-    const row = db.prepare('SELECT * FROM company_details LIMIT 1').get();
+    const result = await query('SELECT * FROM company_details LIMIT 1');
+    const row = result.rows[0];
     if (!row) {
       res.status(404).json({ error: 'Company details not configured.' });
       return;
@@ -69,7 +71,7 @@ router.get('/admin/company', requireAdminAuth, (_req: Request, res: Response) =>
 });
 
 // ADMIN: PUT /api/admin/company
-router.put('/admin/company', requireAdminAuth, (req: Request, res: Response) => {
+router.put('/admin/company', requireAdminAuth, async (req: Request, res: Response) => {
   try {
     const {
       company_name,
@@ -100,74 +102,52 @@ router.put('/admin/company', requireAdminAuth, (req: Request, res: Response) => 
       return;
     }
 
-    const row = db.prepare('SELECT id FROM company_details LIMIT 1').get() as { id: string } | undefined;
+    const currentRes = await query('SELECT id FROM company_details LIMIT 1');
+    const companyId = currentRes.rows[0]?.id || 'company-main';
     const now = new Date().toISOString();
 
-    const phonesList = Array.isArray(phones) && phones.length > 0 ? phones : [phone.trim()];
-    const addressesList = Array.isArray(addresses) && addresses.length > 0 ? addresses : [{ label: 'Main Office', line: address.trim() }];
+    const phonesJson = Array.isArray(phones) ? JSON.stringify(phones) : JSON.stringify([phone.trim()]);
+    const addressesJson = Array.isArray(addresses)
+      ? JSON.stringify(addresses)
+      : JSON.stringify([{ label: 'Main Office', line: address?.trim() || '' }]);
 
-    if (row) {
-      db.prepare(`
-        UPDATE company_details SET
-          company_name = ?,
-          legal_name = ?,
-          short_name = ?,
-          tagline = ?,
-          about = ?,
-          phone = ?,
-          phones_json = ?,
-          email = ?,
-          address = ?,
-          addresses_json = ?,
-          website = ?,
-          facebook = ?,
-          hours = ?,
-          updated_at = ?
-        WHERE id = ?
-      `).run(
-        company_name.trim(),
-        legal_name ? legal_name.trim() : company_name.trim(),
-        short_name ? short_name.trim() : 'Prayag Techno',
-        tagline ? tagline.trim() : '',
-        about ? about.trim() : '',
-        phone.trim(),
-        JSON.stringify(phonesList),
-        email.trim(),
-        address ? address.trim() : '',
-        JSON.stringify(addressesList),
-        website ? website.trim() : '',
-        facebook ? facebook.trim() : '',
-        hours ? hours.trim() : '',
-        now,
-        row.id
-      );
-    } else {
-      const id = 'company-main';
-      db.prepare(`
-        INSERT INTO company_details (
-          id, company_name, legal_name, short_name, tagline, about,
-          phone, phones_json, email, address, addresses_json, website, facebook, hours, updated_at
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-      `).run(
-        id,
-        company_name.trim(),
-        legal_name ? legal_name.trim() : company_name.trim(),
-        short_name ? short_name.trim() : 'Prayag Techno',
-        tagline ? tagline.trim() : '',
-        about ? about.trim() : '',
-        phone.trim(),
-        JSON.stringify(phonesList),
-        email.trim(),
-        address ? address.trim() : '',
-        JSON.stringify(addressesList),
-        website ? website.trim() : '',
-        facebook ? facebook.trim() : '',
-        hours ? hours.trim() : '',
-        now
-      );
-    }
+    const updateRes = await query(`
+      UPDATE company_details SET
+        company_name = $1,
+        legal_name = $2,
+        short_name = $3,
+        tagline = $4,
+        about = $5,
+        phone = $6,
+        phones_json = $7,
+        email = $8,
+        address = $9,
+        addresses_json = $10,
+        website = $11,
+        facebook = $12,
+        hours = $13,
+        updated_at = $14
+      WHERE id = $15
+      RETURNING *
+    `, [
+      company_name.trim(),
+      (legal_name || company_name).trim(),
+      (short_name || 'Prayag Techno').trim(),
+      (tagline || '').trim(),
+      (about || '').trim(),
+      phone.trim(),
+      phonesJson,
+      email.trim().toLowerCase(),
+      (address || '').trim(),
+      addressesJson,
+      (website || '').trim(),
+      (facebook || '').trim(),
+      (hours || 'Monday – Saturday, 09:30 – 18:30 IST').trim(),
+      now,
+      companyId
+    ]);
 
-    const updatedRow = db.prepare('SELECT * FROM company_details LIMIT 1').get();
+    const updatedRow = updateRes.rows[0];
     res.json(formatCompany(updatedRow));
   } catch (error: any) {
     console.error('Update company details error:', error);

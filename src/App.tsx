@@ -47,6 +47,7 @@ function App() {
               <Route path="/book-online" element={<BookOnlinePage />} />
               <Route path="/jobs" element={<JobsPage />} />
               <Route path="/blank-page" element={<BlankPage />} />
+              <Route path="/about" element={<BlankPage />} />
             </Route>
 
             {/* Admin Login Routes */}

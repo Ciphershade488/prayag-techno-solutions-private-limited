@@ -1,20 +1,20 @@
 import { Router, Request, Response } from 'express';
-import { db } from '../db';
+import { query } from '../db';
 import { requireAdminAuth } from '../auth';
 
 const router = Router();
 
 // PUBLIC: GET /api/jobs
 // Returns active/published jobs for public careers page
-router.get('/jobs', (_req: Request, res: Response) => {
+router.get('/jobs', async (_req: Request, res: Response) => {
   try {
-    const jobs = db.prepare(`
+    const result = await query(`
       SELECT * FROM jobs
       WHERE status = 'active'
       ORDER BY created_at DESC
-    `).all();
+    `);
 
-    res.json(jobs);
+    res.json(result.rows);
   } catch (error: any) {
     console.error('Fetch public jobs error:', error);
     res.status(500).json({ error: 'Failed to retrieve jobs.' });
@@ -22,9 +22,10 @@ router.get('/jobs', (_req: Request, res: Response) => {
 });
 
 // PUBLIC: GET /api/jobs/:id
-router.get('/jobs/:id', (req: Request, res: Response) => {
+router.get('/jobs/:id', async (req: Request, res: Response) => {
   try {
-    const job = db.prepare('SELECT * FROM jobs WHERE id = ?').get(req.params.id);
+    const result = await query('SELECT * FROM jobs WHERE id = $1', [req.params.id]);
+    const job = result.rows[0];
     if (!job) {
       res.status(404).json({ error: 'Job opening not found.' });
       return;
@@ -38,14 +39,14 @@ router.get('/jobs/:id', (req: Request, res: Response) => {
 
 // ADMIN: GET /api/admin/jobs
 // Returns all jobs (active and closed)
-router.get('/admin/jobs', requireAdminAuth, (_req: Request, res: Response) => {
+router.get('/admin/jobs', requireAdminAuth, async (_req: Request, res: Response) => {
   try {
-    const jobs = db.prepare(`
+    const result = await query(`
       SELECT * FROM jobs
       ORDER BY created_at DESC
-    `).all();
+    `);
 
-    res.json(jobs);
+    res.json(result.rows);
   } catch (error: any) {
     console.error('Fetch admin jobs error:', error);
     res.status(500).json({ error: 'Failed to retrieve jobs list.' });
@@ -53,9 +54,10 @@ router.get('/admin/jobs', requireAdminAuth, (_req: Request, res: Response) => {
 });
 
 // ADMIN: GET /api/admin/jobs/:id
-router.get('/admin/jobs/:id', requireAdminAuth, (req: Request, res: Response) => {
+router.get('/admin/jobs/:id', requireAdminAuth, async (req: Request, res: Response) => {
   try {
-    const job = db.prepare('SELECT * FROM jobs WHERE id = ?').get(req.params.id);
+    const result = await query('SELECT * FROM jobs WHERE id = $1', [req.params.id]);
+    const job = result.rows[0];
     if (!job) {
       res.status(404).json({ error: 'Job opening not found.' });
       return;
@@ -69,7 +71,7 @@ router.get('/admin/jobs/:id', requireAdminAuth, (req: Request, res: Response) =>
 
 // ADMIN: POST /api/admin/jobs
 // Add new job
-router.post('/admin/jobs', requireAdminAuth, (req: Request, res: Response) => {
+router.post('/admin/jobs', requireAdminAuth, async (req: Request, res: Response) => {
   try {
     const {
       title,
@@ -108,13 +110,14 @@ router.post('/admin/jobs', requireAdminAuth, (req: Request, res: Response) => {
     const now = new Date().toISOString();
     const jobStatus = status === 'closed' ? 'closed' : 'active';
 
-    db.prepare(`
+    const insertRes = await query(`
       INSERT INTO jobs (
         id, title, department, location, employment_type, experience, salary,
         description, responsibilities, requirements, skills, application_email,
         application_link, status, created_at, updated_at
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `).run(
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)
+      RETURNING *
+    `, [
       id,
       title.trim(),
       department.trim(),
@@ -131,10 +134,9 @@ router.post('/admin/jobs', requireAdminAuth, (req: Request, res: Response) => {
       jobStatus,
       now,
       now
-    );
+    ]);
 
-    const createdJob = db.prepare('SELECT * FROM jobs WHERE id = ?').get(id);
-    res.status(201).json(createdJob);
+    res.status(201).json(insertRes.rows[0]);
   } catch (error: any) {
     console.error('Create job error:', error);
     res.status(500).json({ error: 'Failed to create job.' });
@@ -143,11 +145,11 @@ router.post('/admin/jobs', requireAdminAuth, (req: Request, res: Response) => {
 
 // ADMIN: PUT /api/admin/jobs/:id
 // Edit job
-router.put('/admin/jobs/:id', requireAdminAuth, (req: Request, res: Response) => {
+router.put('/admin/jobs/:id', requireAdminAuth, async (req: Request, res: Response) => {
   try {
     const id = req.params.id;
-    const existing = db.prepare('SELECT * FROM jobs WHERE id = ?').get(id);
-    if (!existing) {
+    const existingRes = await query('SELECT * FROM jobs WHERE id = $1', [id]);
+    if (!existingRes.rows[0]) {
       res.status(404).json({ error: 'Job not found.' });
       return;
     }
@@ -188,24 +190,25 @@ router.put('/admin/jobs/:id', requireAdminAuth, (req: Request, res: Response) =>
     const now = new Date().toISOString();
     const jobStatus = status === 'closed' ? 'closed' : 'active';
 
-    db.prepare(`
+    const updateRes = await query(`
       UPDATE jobs SET
-        title = ?,
-        department = ?,
-        location = ?,
-        employment_type = ?,
-        experience = ?,
-        salary = ?,
-        description = ?,
-        responsibilities = ?,
-        requirements = ?,
-        skills = ?,
-        application_email = ?,
-        application_link = ?,
-        status = ?,
-        updated_at = ?
-      WHERE id = ?
-    `).run(
+        title = $1,
+        department = $2,
+        location = $3,
+        employment_type = $4,
+        experience = $5,
+        salary = $6,
+        description = $7,
+        responsibilities = $8,
+        requirements = $9,
+        skills = $10,
+        application_email = $11,
+        application_link = $12,
+        status = $13,
+        updated_at = $14
+      WHERE id = $15
+      RETURNING *
+    `, [
       title.trim(),
       department.trim(),
       location.trim(),
@@ -221,10 +224,9 @@ router.put('/admin/jobs/:id', requireAdminAuth, (req: Request, res: Response) =>
       jobStatus,
       now,
       id
-    );
+    ]);
 
-    const updated = db.prepare('SELECT * FROM jobs WHERE id = ?').get(id);
-    res.json(updated);
+    res.json(updateRes.rows[0]);
   } catch (error: any) {
     console.error('Update job error:', error);
     res.status(500).json({ error: 'Failed to update job opening.' });
@@ -233,10 +235,11 @@ router.put('/admin/jobs/:id', requireAdminAuth, (req: Request, res: Response) =>
 
 // ADMIN: PATCH /api/admin/jobs/:id/status
 // Toggle or set status (active / closed)
-router.patch('/admin/jobs/:id/status', requireAdminAuth, (req: Request, res: Response) => {
+router.patch('/admin/jobs/:id/status', requireAdminAuth, async (req: Request, res: Response) => {
   try {
     const id = req.params.id;
-    const existing = db.prepare('SELECT * FROM jobs WHERE id = ?').get(id) as any;
+    const existingRes = await query('SELECT * FROM jobs WHERE id = $1', [id]);
+    const existing = existingRes.rows[0];
     if (!existing) {
       res.status(404).json({ error: 'Job not found.' });
       return;
@@ -247,10 +250,12 @@ router.patch('/admin/jobs/:id/status', requireAdminAuth, (req: Request, res: Res
       : (existing.status === 'active' ? 'closed' : 'active');
 
     const now = new Date().toISOString();
-    db.prepare('UPDATE jobs SET status = ?, updated_at = ? WHERE id = ?').run(newStatus, now, id);
+    const updateRes = await query(
+      'UPDATE jobs SET status = $1, updated_at = $2 WHERE id = $3 RETURNING *',
+      [newStatus, now, id]
+    );
 
-    const updated = db.prepare('SELECT * FROM jobs WHERE id = ?').get(id);
-    res.json(updated);
+    res.json(updateRes.rows[0]);
   } catch (error: any) {
     console.error('Toggle job status error:', error);
     res.status(500).json({ error: 'Failed to update job status.' });
@@ -258,16 +263,16 @@ router.patch('/admin/jobs/:id/status', requireAdminAuth, (req: Request, res: Res
 });
 
 // ADMIN: DELETE /api/admin/jobs/:id
-router.delete('/admin/jobs/:id', requireAdminAuth, (req: Request, res: Response) => {
+router.delete('/admin/jobs/:id', requireAdminAuth, async (req: Request, res: Response) => {
   try {
     const id = req.params.id;
-    const existing = db.prepare('SELECT * FROM jobs WHERE id = ?').get(id);
-    if (!existing) {
+    const existingRes = await query('SELECT id FROM jobs WHERE id = $1', [id]);
+    if (!existingRes.rows[0]) {
       res.status(404).json({ error: 'Job not found.' });
       return;
     }
 
-    db.prepare('DELETE FROM jobs WHERE id = ?').run(id);
+    await query('DELETE FROM jobs WHERE id = $1', [id]);
     res.json({ success: true, message: 'Job opening deleted successfully.' });
   } catch (error: any) {
     console.error('Delete job error:', error);

@@ -59,20 +59,13 @@ export const SiteHeader: React.FC = () => {
             </a>
           )}
 
-          {isAuthed ? (
+          {isAuthed && (
             <Link
               to="/admin/dashboard"
               className="inline-flex items-center gap-1.5 rounded-md border border-primary/30 bg-primary/10 px-3.5 py-2 text-xs font-semibold text-primary transition-colors hover:bg-primary/20"
             >
               <Shield className="h-3.5 w-3.5" />
               <span>Admin Panel</span>
-            </Link>
-          ) : (
-            <Link
-              to="/admin/login"
-              className="text-xs font-medium text-muted-foreground transition-colors hover:text-foreground"
-            >
-              Admin Login
             </Link>
           )}
 
@@ -111,13 +104,15 @@ export const SiteHeader: React.FC = () => {
             </NavLink>
           ))}
           <div className="mt-2 flex flex-col gap-2">
-            <Link
-              to={isAuthed ? '/admin/dashboard' : '/admin/login'}
-              onClick={() => setOpen(false)}
-              className="flex h-11 items-center justify-center gap-2 rounded-md border border-border text-sm font-medium text-muted-foreground"
-            >
-              <Shield className="h-4 w-4" /> {isAuthed ? 'Admin Dashboard' : 'Admin Portal'}
-            </Link>
+            {isAuthed && (
+              <Link
+                to="/admin/dashboard"
+                onClick={() => setOpen(false)}
+                className="flex h-11 items-center justify-center gap-2 rounded-md border border-border text-sm font-medium text-muted-foreground"
+              >
+                <Shield className="h-4 w-4" /> Admin Dashboard
+              </Link>
+            )}
             <Link
               to="/book-online"
               onClick={() => setOpen(false)}

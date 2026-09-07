@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { db } from './db';
+import { query } from './db';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'prayag-techno-solutions-jwt-secret-2026';
 const TOKEN_EXPIRY = '7d';
@@ -42,7 +42,7 @@ export function verifyToken(token: string): AdminUser | null {
   }
 }
 
-export function requireAdminAuth(req: AuthRequest, res: Response, next: NextFunction) {
+export async function requireAdminAuth(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
   let token: string | undefined;
 
   // 1. Authorization header: "Bearer <token>"
@@ -67,13 +67,20 @@ export function requireAdminAuth(req: AuthRequest, res: Response, next: NextFunc
     return;
   }
 
-  // Verify admin still exists in database
-  const adminRow = db.prepare('SELECT id, username, email, created_at FROM admins WHERE id = ?').get(payload.id) as unknown as AdminUser | undefined;
-  if (!adminRow) {
-    res.status(401).json({ error: 'Admin account not found or removed.' });
-    return;
-  }
+  try {
+    // Verify admin still exists in PostgreSQL database
+    const adminRes = await query('SELECT id, username, email, created_at FROM admins WHERE id = $1', [payload.id]);
+    const adminRow = adminRes.rows[0] as AdminUser | undefined;
+    
+    if (!adminRow) {
+      res.status(401).json({ error: 'Admin account not found or removed.' });
+      return;
+    }
 
-  req.admin = adminRow;
-  next();
+    req.admin = adminRow;
+    next();
+  } catch (err: any) {
+    console.error('Auth verification error:', err);
+    res.status(500).json({ error: 'Authentication verification error.' });
+  }
 }

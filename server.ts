@@ -14,8 +14,8 @@ async function startServer() {
   const app = express();
   const PORT = 3000;
 
-  // Initialize SQLite database, create tables, and seed defaults
-  initDatabase();
+  // Initialize PostgreSQL database, create tables, and seed defaults
+  await initDatabase();
 
   app.use(express.json({ limit: '10mb' }));
   app.use(express.urlencoded({ extended: true }));

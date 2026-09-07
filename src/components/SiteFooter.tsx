@@ -43,15 +43,6 @@ export const SiteFooter: React.FC = () => {
             <li><Link to="/book-online" className="transition-colors hover:text-white">Book Online</Link></li>
             <li><Link to="/jobs" className="transition-colors hover:text-white">Careers / Jobs</Link></li>
             <li><Link to="/blank-page" className="transition-colors hover:text-white">About Us</Link></li>
-            <li>
-              <Link
-                to="/admin/login"
-                className="inline-flex items-center gap-1.5 text-blue-400 transition-colors hover:text-blue-300"
-              >
-                <Shield className="h-3.5 w-3.5" />
-                <span>Admin Login</span>
-              </Link>
-            </li>
           </ul>
         </div>
 
@@ -109,12 +100,8 @@ export const SiteFooter: React.FC = () => {
           <span>
             © {new Date().getFullYear()} {company.legal_name || company.company_name}. All rights reserved.
           </span>
-          <span className="flex items-center gap-2">
-            <Link to="/admin/login" className="text-slate-400 hover:text-slate-300">
-              Admin Portal
-            </Link>
-            <span>•</span>
-            <span>Data protected under standard corporate & privacy norms.</span>
+          <span>
+            Data protected under standard corporate & privacy norms.
           </span>
         </div>
       </div>

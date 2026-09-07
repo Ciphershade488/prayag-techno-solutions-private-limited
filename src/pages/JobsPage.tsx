@@ -14,6 +14,10 @@ import {
   ChevronUp,
   Sparkles,
   ExternalLink,
+  Award,
+  Users,
+  ShieldCheck,
+  TrendingUp,
 } from 'lucide-react';
 import Reveal from '@/components/Reveal';
 import { Input } from '@/components/ui/input';
@@ -43,6 +47,29 @@ const initialForm = {
   message: '',
   gdpr: false,
 };
+
+const CULTURE_PILLARS = [
+  {
+    icon: TrendingUp,
+    title: 'Merit-Driven Growth',
+    desc: 'Structured career progression based on real impact, technical skill, and client success.',
+  },
+  {
+    icon: Award,
+    title: 'Hands-On Tech Experience',
+    desc: 'Work on live government tender systems, high-density networks, and enterprise IT hardware.',
+  },
+  {
+    icon: Users,
+    title: 'Collaborative Environment',
+    desc: 'Direct mentorship from executive leadership and seasoned domain consultants.',
+  },
+  {
+    icon: ShieldCheck,
+    title: 'Stability & Transparency',
+    desc: 'Consistent payroll, formal service agreements, and standard corporate benefits.',
+  },
+];
 
 export const JobsPage: React.FC = () => {
   const { company } = useCompany();
@@ -138,40 +165,62 @@ export const JobsPage: React.FC = () => {
   return (
     <>
       <Helmet>
-        <title>Careers & Current Job Openings — {company.company_name}</title>
+        <title>Careers &amp; Current Job Openings — {company.company_name}</title>
         <meta
           name="description"
           content={`Explore current job openings at ${company.legal_name || company.company_name} in IT support, HR, BPO, and GeM consulting.`}
         />
       </Helmet>
 
-      {/* Hero */}
-      <section className="bg-[hsl(222,47%,9%)] py-14 text-white sm:py-20">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6">
+      {/* Hero Banner */}
+      <section className="relative overflow-hidden bg-[hsl(222,47%,9%)] py-16 text-white sm:py-24">
+        <div
+          className="pointer-events-none absolute inset-0 opacity-40"
+          style={{ background: 'radial-gradient(65rem 30rem at 75% -10%, hsl(214 90% 42% / 0.45), transparent 60%)' }}
+        />
+        <div className="relative mx-auto max-w-6xl px-4 sm:px-6">
           <Reveal>
-            <span className="text-xs font-semibold uppercase tracking-wider text-blue-400">
-              Careers & Opportunities
+            <span className="inline-flex items-center gap-2 rounded-full border border-blue-500/30 bg-blue-500/10 px-3.5 py-1 text-xs font-semibold uppercase tracking-wider text-blue-300">
+              <Briefcase className="h-3.5 w-3.5" /> Careers &amp; Opportunities
             </span>
-            <h1 className="mt-2 font-display text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
+            <h1 className="mt-4 font-display text-3xl font-bold tracking-tight sm:text-5xl">
               Build your career with {company.short_name || 'Prayag Techno'}
             </h1>
-            <p className="mt-4 max-w-2xl text-slate-300">
-              {company.legal_name} is a growing team of professionals delivering IT, HR, and BPO
-              solutions to corporate and government clients across India. Explore our active openings below.
+            <p className="mt-4 max-w-2xl text-base leading-relaxed text-slate-300 sm:text-lg">
+              {company.legal_name} is an expanding team of technology engineers, GeM advisors, and operations professionals delivering trusted business solutions across India.
             </p>
           </Reveal>
         </div>
       </section>
 
+      {/* Why Join Us Culture Grid */}
+      <section className="border-b border-border bg-slate-50/70 py-12 dark:bg-slate-900/40">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6">
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {CULTURE_PILLARS.map((p, i) => (
+              <Reveal key={p.title} delay={i * 0.07}>
+                <div className="h-full rounded-xl border border-border bg-card p-5 shadow-sm">
+                  <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                    <p.icon className="h-5 w-5" strokeWidth={1.8} />
+                  </span>
+                  <h4 className="mt-4 font-display text-sm font-bold text-foreground">{p.title}</h4>
+                  <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{p.desc}</p>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Main Jobs Section */}
-      <section className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:py-16">
+      <section className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:py-20">
         <div className="flex flex-col justify-between gap-4 border-b border-border pb-6 sm:flex-row sm:items-center">
           <div>
             <h2 className="font-display text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
-              Current Open Positions
+              Active Career Openings
             </h2>
-            <p className="mt-1 text-sm text-muted-foreground">
-              {jobs.length} active career listing{jobs.length === 1 ? '' : 's'} available
+            <p className="mt-1 text-xs text-muted-foreground sm:text-sm">
+              {filteredJobs.length} position{filteredJobs.length === 1 ? '' : 's'} currently open for application
             </p>
           </div>
 
@@ -181,10 +230,10 @@ export const JobsPage: React.FC = () => {
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
                 type="text"
-                placeholder="Search jobs, skills, or city..."
+                placeholder="Search by title, skill, or city..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="h-10 pl-9 text-sm"
+                className="h-10 pl-9 text-xs"
               />
             </div>
 
@@ -217,22 +266,22 @@ export const JobsPage: React.FC = () => {
               <Search className="h-6 w-6" strokeWidth={1.8} />
             </span>
             <h3 className="mt-4 font-display text-lg font-bold text-foreground">No openings found</h3>
-            <p className="mt-1 text-sm text-muted-foreground">
+            <p className="mt-1 text-xs text-muted-foreground">
               {search || filterDept !== 'all'
                 ? 'Try adjusting your search query or department filter.'
-                : 'There are no active openings right now. Check back soon or submit a spontaneous application below.'}
+                : 'There are no active listings at this moment. You may submit a spontaneous application below.'}
             </p>
           </div>
         ) : (
-          <div className="mt-8 space-y-4">
+          <div className="mt-8 space-y-5">
             {filteredJobs.map((job, i) => {
               const isExpanded = expandedJobId === job.id;
               return (
                 <Reveal key={job.id} delay={i * 0.05}>
-                  <div className="overflow-hidden rounded-2xl border border-border bg-card transition-all hover:border-primary/40 hover:shadow-sm">
+                  <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-sm transition-all hover:border-primary/40 hover:shadow-md">
                     <div className="flex flex-col gap-4 p-6 sm:flex-row sm:items-start sm:justify-between sm:p-7">
                       <div className="flex-1">
-                        <div className="flex flex-wrap items-center gap-2.5">
+                        <div className="flex flex-wrap items-center gap-2">
                           <span className="rounded-md bg-primary/10 px-2.5 py-1 text-xs font-semibold text-primary">
                             {job.department}
                           </span>
@@ -246,7 +295,7 @@ export const JobsPage: React.FC = () => {
                           <span>{job.title}</span>
                         </h3>
 
-                        <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                        <p className="mt-2 text-xs leading-relaxed text-muted-foreground sm:text-sm">
                           {job.description}
                         </p>
 
@@ -255,21 +304,21 @@ export const JobsPage: React.FC = () => {
                             <MapPin className="h-3.5 w-3.5 text-primary" /> {job.location}
                           </span>
                           <span className="flex items-center gap-1.5 font-medium text-foreground">
-                            <Clock className="h-3.5 w-3.5 text-primary" /> {job.experience} exp
+                            <Clock className="h-3.5 w-3.5 text-primary" /> {job.experience} Experience
                           </span>
                           {job.salary && (
-                            <span className="flex items-center gap-1.5 font-medium text-emerald-600 dark:text-emerald-400">
+                            <span className="flex items-center gap-1.5 font-semibold text-emerald-600 dark:text-emerald-400">
                               <IndianRupee className="h-3.5 w-3.5" /> {job.salary}
                             </span>
                           )}
                         </div>
 
                         {job.skills && (
-                          <div className="mt-3 flex flex-wrap items-center gap-1.5">
+                          <div className="mt-3.5 flex flex-wrap items-center gap-1.5">
                             {job.skills.split(',').map((skill, idx) => (
                               <span
                                 key={idx}
-                                className="rounded-full bg-secondary px-2.5 py-0.5 text-[11px] text-muted-foreground"
+                                className="rounded-full bg-slate-100 px-2.5 py-0.5 text-[11px] font-medium text-slate-700 dark:bg-slate-800 dark:text-slate-300"
                               >
                                 {skill.trim()}
                               </span>
@@ -282,7 +331,7 @@ export const JobsPage: React.FC = () => {
                         <button
                           type="button"
                           onClick={() => applyFor(job)}
-                          className="h-11 rounded-lg bg-primary px-5 text-sm font-semibold text-primary-foreground shadow-sm transition-all hover:bg-primary/90 active:scale-[0.98]"
+                          className="h-11 rounded-md bg-primary px-6 text-sm font-semibold text-primary-foreground shadow transition-all hover:bg-primary/90 active:scale-[0.98]"
                         >
                           Apply Now
                         </button>
@@ -293,7 +342,7 @@ export const JobsPage: React.FC = () => {
                             onClick={() => setExpandedJobId(isExpanded ? null : job.id)}
                             className="inline-flex h-9 items-center gap-1 rounded-md px-3 text-xs font-medium text-muted-foreground hover:bg-secondary hover:text-foreground"
                           >
-                            <span>{isExpanded ? 'Less details' : 'View full details'}</span>
+                            <span>{isExpanded ? 'Less details' : 'Job Specifications'}</span>
                             {isExpanded ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
                           </button>
                         )}
@@ -302,12 +351,12 @@ export const JobsPage: React.FC = () => {
 
                     {/* Expanded Job Specifications */}
                     {isExpanded && (
-                      <div className="border-t border-border bg-secondary/30 p-6 sm:p-7">
+                      <div className="border-t border-border bg-slate-50/60 p-6 dark:bg-slate-900/30 sm:p-7">
                         <div className="grid gap-6 md:grid-cols-2">
                           {job.responsibilities && (
                             <div>
-                              <h4 className="font-display text-sm font-bold text-foreground">
-                                Key Responsibilities:
+                              <h4 className="font-display text-xs font-bold uppercase tracking-wider text-foreground">
+                                Responsibilities:
                               </h4>
                               <p className="mt-2 whitespace-pre-wrap text-xs leading-relaxed text-muted-foreground">
                                 {job.responsibilities}
@@ -317,8 +366,8 @@ export const JobsPage: React.FC = () => {
 
                           {job.requirements && (
                             <div>
-                              <h4 className="font-display text-sm font-bold text-foreground">
-                                Requirements & Qualifications:
+                              <h4 className="font-display text-xs font-bold uppercase tracking-wider text-foreground">
+                                Qualifications &amp; Skills:
                               </h4>
                               <p className="mt-2 whitespace-pre-wrap text-xs leading-relaxed text-muted-foreground">
                                 {job.requirements}
@@ -329,7 +378,7 @@ export const JobsPage: React.FC = () => {
 
                         <div className="mt-6 flex flex-wrap items-center justify-between gap-3 border-t border-border pt-4 text-xs text-muted-foreground">
                           <span>
-                            Direct HR Inquiries:{' '}
+                            Direct HR Desk:{' '}
                             <strong className="text-foreground">
                               {job.application_email || company.email}
                             </strong>
@@ -341,7 +390,7 @@ export const JobsPage: React.FC = () => {
                               rel="noopener noreferrer"
                               className="inline-flex items-center gap-1 text-primary hover:underline"
                             >
-                              <span>External Application Portal</span>
+                              <span>Official Application Link</span>
                               <ExternalLink className="h-3 w-3" />
                             </a>
                           )}
@@ -359,67 +408,69 @@ export const JobsPage: React.FC = () => {
         <div id="apply-form" className="mt-16 scroll-mt-24">
           <Reveal>
             {status === 'success' ? (
-              <div className="rounded-2xl border border-border bg-card p-10 text-center shadow-sm">
-                <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-primary/10 text-primary">
-                  <CheckCircle2 className="h-7 w-7" strokeWidth={1.8} />
+              <div className="rounded-2xl border border-border bg-card p-10 text-center shadow-md">
+                <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-primary">
+                  <CheckCircle2 className="h-8 w-8" strokeWidth={2} />
                 </span>
                 <h2 className="mt-5 font-display text-2xl font-bold text-foreground">
-                  Application Submitted
+                  Application Logged Successfully
                 </h2>
                 <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-muted-foreground">
                   Thank you for applying for the{' '}
-                  <strong className="text-foreground">{form.role}</strong> position at {company.legal_name}.
-                  Our HR recruitment team will review your qualifications and contact you.
+                  <strong className="text-foreground">{form.role}</strong> opening at {company.legal_name}.
+                  Our HR recruitment team will review your credentials and contact you if shortlisted.
                 </p>
                 <button
                   onClick={() => {
                     setForm(initialForm);
                     setStatus('idle');
                   }}
-                  className="mt-7 h-11 rounded-md border border-border px-6 text-sm font-medium text-foreground transition-colors hover:bg-secondary"
+                  className="mt-7 h-11 rounded-md border border-border bg-card px-6 text-sm font-semibold text-foreground transition-colors hover:bg-secondary"
                 >
                   Submit another application
                 </button>
               </div>
             ) : (
               <form onSubmit={onSubmit} className="rounded-2xl border border-border bg-card p-6 shadow-sm sm:p-8">
-                <div className="flex items-center gap-2">
-                  <Sparkles className="h-5 w-5 text-primary" />
-                  <h2 className="font-display text-2xl font-bold tracking-tight text-foreground">
-                    Apply Online
-                  </h2>
+                <div className="border-b border-border pb-4">
+                  <div className="flex items-center gap-2">
+                    <Sparkles className="h-5 w-5 text-primary" />
+                    <h2 className="font-display text-xl font-bold tracking-tight text-foreground">
+                      Candidate Application Form
+                    </h2>
+                  </div>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    Direct candidate intake portal for Prayag Techno Solutions. All applications are routed to our HR desk.
+                  </p>
                 </div>
-                <p className="mt-2 text-sm text-muted-foreground">
-                  Complete this form to submit your candidacy. Applications are logged directly into our administrative HR portal.
-                </p>
 
                 <div className="mt-6 grid gap-5 sm:grid-cols-2">
                   <div className="grid gap-2">
-                    <Label htmlFor="jb-name">Full name *</Label>
+                    <Label htmlFor="jb-name">Full Name *</Label>
                     <Input
                       id="jb-name"
                       required
                       maxLength={120}
                       value={form.name}
                       onChange={(e) => set('name', e.target.value)}
-                      placeholder="Jane Doe"
+                      placeholder="e.g. Amit Verma"
                     />
                   </div>
 
                   <div className="grid gap-2">
-                    <Label htmlFor="jb-email">Email *</Label>
+                    <Label htmlFor="jb-email">Email Address *</Label>
                     <Input
                       id="jb-email"
                       type="email"
                       required
                       value={form.email}
                       onChange={(e) => set('email', e.target.value)}
-                      placeholder="you@example.com"
+                      placeholder="amit@example.com"
                     />
                   </div>
 
                   <div className="grid gap-2">
-                    <Label htmlFor="jb-phone">Phone number *</Label>
+                    <Label htmlFor="jb-phone">Mobile Phone Number *</Label>
                     <Input
                       id="jb-phone"
                       type="tel"
@@ -465,7 +516,7 @@ export const JobsPage: React.FC = () => {
                       type="text"
                       value={form.location}
                       onChange={(e) => set('location', e.target.value)}
-                      placeholder="e.g. Prayagraj, Kochi, Varanasi"
+                      placeholder="e.g. Prayagraj, Kochi, Lucknow"
                     />
                   </div>
 
@@ -489,12 +540,12 @@ export const JobsPage: React.FC = () => {
                       maxLength={2000}
                       value={form.message}
                       onChange={(e) => set('message', e.target.value)}
-                      placeholder="Briefly describe your skill background, career highlights, and why you are interested in joining Prayag Techno Solutions."
+                      placeholder="Briefly summarize your core qualifications, previous work achievements, and motivation for joining our firm."
                     />
                   </div>
                 </div>
 
-                <div className="mt-6 flex items-start gap-3 rounded-lg bg-secondary/70 p-4">
+                <div className="mt-6 flex items-start gap-3 rounded-lg border border-border/80 bg-slate-50/60 p-4 dark:bg-slate-900/40">
                   <Checkbox
                     id="jb-gdpr"
                     checked={form.gdpr}
@@ -505,29 +556,31 @@ export const JobsPage: React.FC = () => {
                     htmlFor="jb-gdpr"
                     className="cursor-pointer text-xs font-normal leading-relaxed text-muted-foreground"
                   >
-                    I consent to {company.legal_name} storing and processing my application data for recruitment purposes.
+                    I consent to {company.legal_name || company.company_name} storing and processing my personal credentials for current and future employment evaluation.
                   </Label>
                 </div>
 
                 {error && (
-                  <p className="mt-4 rounded-md bg-destructive/10 px-4 py-3 text-sm text-destructive">{error}</p>
+                  <p className="mt-4 rounded-md bg-destructive/10 px-4 py-3 text-xs font-medium text-destructive">{error}</p>
                 )}
 
-                <button
-                  type="submit"
-                  disabled={status === 'sending'}
-                  className="mt-6 inline-flex h-12 w-full items-center justify-center gap-2 rounded-lg bg-primary px-6 text-sm font-semibold text-primary-foreground shadow-sm transition-all hover:bg-primary/90 active:scale-[0.98] disabled:opacity-60 sm:w-auto"
-                >
-                  {status === 'sending' ? (
-                    <>
-                      <Loader2 className="h-4 w-4 animate-spin" /> Submitting application…
-                    </>
-                  ) : (
-                    <>
-                      <Send className="h-4 w-4" /> Submit Application
-                    </>
-                  )}
-                </button>
+                <div className="mt-6">
+                  <button
+                    type="submit"
+                    disabled={status === 'sending'}
+                    className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-md bg-primary px-8 text-sm font-semibold text-primary-foreground shadow transition-all hover:bg-primary/90 active:scale-[0.98] disabled:opacity-60 sm:w-auto"
+                  >
+                    {status === 'sending' ? (
+                      <>
+                        <Loader2 className="h-4 w-4 animate-spin" /> Submitting Application…
+                      </>
+                    ) : (
+                      <>
+                        <Send className="h-4 w-4" /> Submit Application
+                      </>
+                    )}
+                  </button>
+                </div>
               </form>
             )}
           </Reveal>
